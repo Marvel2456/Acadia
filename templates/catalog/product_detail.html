@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}{{ product.name }} — Acadia Bakery Lagos{% endblock %}
+{% block meta_description %}{{ product.short_description }}{% endblock %}
+{% block og_title %}{{ product.name }} — Acadia Lagos{% endblock %}
+{% block og_description %}{{ product.short_description }}{% endblock %}
+{% block og_image %}{% if product.image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero-spread.jpg' %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <!-- Breadcrumbs -->
+  <nav class="flex items-center gap-2 text-xs font-semibold text-stone-500 mb-8 overflow-x-auto whitespace-nowrap">
+    <a href="{% url 'cms:home' %}" class="hover:text-stone-900">Home</a>
+    <span>/</span>
+    <a href="{% url 'catalog:product_list' %}" class="hover:text-stone-900">Shop Menu</a>
+    <span>/</span>
+    <a href="{{ product.category.get_absolute_url }}" class="hover:text-stone-900">{{ product.category.name }}</a>
+    <span>/</span>
+    <span class="text-stone-900 truncate">{{ product.name }}</span>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+    
+    <!-- Left Column: Product Imagery -->
+    <div class="lg:col-span-6 space-y-4">
+      <div class="relative aspect-square rounded-3xl overflow-hidden border border-acadia-border bg-acadia-cream shadow-sm">
+        {% if product.image %}
+          <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+        {% else %}
+          <div class="w-full h-full flex items-center justify-center text-6xl">
+            🥐
+          </div>
+        {% endif %}
+
+        <!-- Floating Badges -->
+        <div class="absolute top-4 left-4 flex flex-col gap-2">
+          {% if product.is_bestseller %}
+            <span class="badge-orange uppercase tracking-wider text-xs font-black shadow-sm">
+              ★ Bestseller
+            </span>
+          {% endif %}
+          {% if product.is_featured %}
+            <span class="badge-lime uppercase tracking-wider text-xs font-black shadow-sm">
+              Chef's Special
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Product Purchasing Details -->
+    <div class="lg:col-span-6 space-y-6">
+      
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-stone-500 block mb-1">
+          {{ product.category.name }}
+        </span>
+        <h1 class="font-display text-3xl sm:text-4xl font-black text-stone-900 mb-3">
+          {{ product.name }}
+        </h1>
+        
+        <!-- Live Dynamic Price Container -->
+        <div class="flex items-baseline gap-3 mb-4">
+          <span id="display-price" class="font-display text-3xl sm:text-4xl font-black text-stone-900" data-base-price="{{ product.price }}">
+            ₦{{ product.price|intcomma }}
+          </span>
+          {% if product.servings_or_size %}
+            <span class="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
+              {{ product.servings_or_size }}
+            </span>
+          {% endif %}
+        </div>
+
+        <p class="text-stone-600 text-sm sm:text-base leading-relaxed">
+          {{ product.short_description }}
+        </p>
+      </div>
+
+      <!-- Add to Cart Form -->
+      <form 
+        hx-post="{% url 'orders:cart_add' product_id=product.id %}" 
+        hx-target="#nav-cart-badge" 
+        hx-swap="outerHTML" 
+        class="space-y-6 pt-4 border-t border-stone-200">
+        {% csrf_token %}
+
+        <!-- Variations Selector (if available) -->
+        {% if variations %}
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
+              Select Option / Portion Size:
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {% for v in variations %}
+                <label class="relative flex items-center justify-between p-3 rounded-2xl border border-stone-200 bg-white cursor-pointer hover:border-acadia-orange transition-all has-[:checked]:border-acadia-orange has-[:checked]:bg-acadia-cream/50 has-[:checked]:ring-1 has-[:checked]:ring-acadia-orange">
+                  <div class="flex items-center gap-2.5">
+                    <input 
+                      type="radio" 
+                      name="variation" 
+                      value="{{ v.id }}" 
+                      data-modifier="{{ v.price_modifier }}"
+                      onchange="updateDynamicPrice(this)"
+                      {% if forloop.first %}checked{% endif %} 
+                      class="text-acadia-orange focus:ring-acadia-orange">
+                    <span class="text-xs font-bold text-stone-800">{{ v.name }}</span>
+                  </div>
+                  {% if v.price_modifier > 0 %}
+                    <span class="text-[11px] font-semibold text-stone-500">+₦{{ v.price_modifier|intcomma }}</span>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Quantity & Add-To-Cart Row -->
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <!-- Quantity Control -->
+          <div class="flex items-center rounded-2xl border border-stone-200 bg-stone-50 p-1 w-full sm:w-auto justify-between sm:justify-start">
+            <button 
+              type="button" 
+              onclick="adjustQty(-1)" 
+              class="w-10 h-10 rounded-xl bg-white text-stone-700 font-bold hover:bg-stone-200 flex items-center justify-center shadow-sm">
+              -
+            </button>
+            <input 
+              type="number" 
+              id="quantity-input" 
+              name="quantity" 
+              value="1" 
+              min="1" 
+              max="50" 
+              class="w-14 text-center bg-transparent text-sm font-bold text-stone-900 focus:outline-none">
+            <button 
+              type="button" 
+              onclick="adjustQty(1)" 
+              class="w-10 h-10 rounded-xl bg-white text-stone-700 font-bold hover:bg-stone-200 flex items-center justify-center shadow-sm">
+              +
+            </button>
+          </div>
+
+          <!-- Add Button -->
+          {% if product.is_available %}
+            <button 
+              type="submit" 
+              class="w-full sm:flex-grow py-3.5 px-8 rounded-2xl bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-black text-sm shadow-md hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              <span>Add to Basket</span>
+            </button>
+          {% else %}
+            <button type="button" disabled class="w-full py-3.5 rounded-2xl bg-stone-200 text-stone-400 font-bold text-sm cursor-not-allowed">
+              Currently Unavailable
+            </button>
+          {% endif %}
+        </div>
+
+      </form>
+
+      <!-- Key Assurance Cards -->
+      <div class="grid grid-cols-2 gap-3 pt-4 text-xs font-semibold text-stone-700">
+        <div class="p-3 rounded-2xl bg-stone-50 border border-stone-100 flex items-center gap-2">
+          <span>🕒</span>
+          <span>Lead Time: {{ product.lead_time_hours }} Hours Notice</span>
+        </div>
+        <div class="p-3 rounded-2xl bg-stone-50 border border-stone-100 flex items-center gap-2">
+          <span>🛵</span>
+          <span>Lagos Island &amp; Mainland Delivery</span>
+        </div>
+      </div>
+
+      <!-- Full Description Accordion -->
+      {% if product.full_description %}
+        <div class="pt-6 border-t border-stone-200 space-y-2">
+          <h3 class="font-display text-lg font-bold text-stone-900">About this recipe</h3>
+          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed whitespace-pre-line">
+            {{ product.full_description }}
+          </p>
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+  <!-- Related Products Section -->
+  {% if related_products %}
+    <div class="mt-20 pt-12 border-t border-stone-200">
+      <h2 class="font-display text-2xl sm:text-3xl font-black text-stone-900 mb-8">
+        You May Also Love
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for rel in related_products %}
+          {% include 'partials/product_card.html' with product=rel %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function adjustQty(amount) {
+    const input = document.getElementById('quantity-input');
+    let val = parseInt(input.value) || 1;
+    val = Math.max(1, Math.min(50, val + amount));
+    input.value = val;
+  }
+
+  function updateDynamicPrice(radio) {
+    const display = document.getElementById('display-price');
+    const basePrice = parseFloat(display.getAttribute('data-base-price')) || 0;
+    const modifier = parseFloat(radio.getAttribute('data-modifier')) || 0;
+    const finalPrice = basePrice + modifier;
+    display.innerText = '₦' + finalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+</script>
+{% endblock %}

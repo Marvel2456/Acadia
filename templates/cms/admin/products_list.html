@@ -1,0 +1,107 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load humanize %}
+
+{% block header_title %}Manage Products &amp; Bakery Catalogue{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+  
+  <!-- Header Bar with Add Button -->
+  <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+    <form method="GET" class="flex items-center gap-3 w-full md:w-auto">
+      <input 
+        type="text" 
+        name="q" 
+        value="{{ query }}" 
+        placeholder="Search products..." 
+        class="px-4 py-2 rounded-xl border border-stone-200 text-xs w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-amber-400">
+      
+      <select name="category" onchange="this.form.submit()" class="px-3 py-2 rounded-xl border border-stone-200 text-xs bg-white font-bold">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+
+      {% if query or selected_category %}
+        <a href="{% url 'cms:products' %}" class="text-xs text-rose-600 font-bold hover:underline">Clear</a>
+      {% endif %}
+    </form>
+
+    <a href="{% url 'cms:product_create' %}" class="px-4 py-2.5 rounded-xl bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-bold text-xs shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+      <span>+</span> Add New Product
+    </a>
+  </div>
+
+  <!-- Products Table -->
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="bg-stone-50 border-b border-stone-200 text-stone-500 font-bold uppercase tracking-wider">
+            <th class="p-4 pl-6">Product</th>
+            <th class="p-4">Category</th>
+            <th class="p-4">Price (₦)</th>
+            <th class="p-4">Badges</th>
+            <th class="p-4">Availability</th>
+            <th class="p-4 text-right pr-6">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+          {% for product in products %}
+            <tr class="hover:bg-stone-50/80 transition-colors">
+              <td class="p-4 pl-6">
+                <div class="flex items-center gap-3">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-12 h-12 rounded-xl object-cover border border-stone-200 flex-shrink-0">
+                  {% else %}
+                    <div class="w-12 h-12 rounded-xl bg-stone-100 flex items-center justify-center text-xl flex-shrink-0">🥐</div>
+                  {% endif %}
+                  <div>
+                    <a href="{% url 'cms:product_edit' pk=product.pk %}" class="font-bold text-stone-900 hover:underline">
+                      {{ product.name }}
+                    </a>
+                    <span class="block text-[11px] text-stone-400 mt-0.5">{{ product.short_description|truncatewords:6 }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4 font-semibold text-stone-800">
+                {{ product.category.name }}
+              </td>
+              <td class="p-4 font-black text-stone-900">
+                ₦{{ product.price|intcomma }}
+              </td>
+              <td class="p-4">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  {% if product.is_bestseller %}
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900">Bestseller</span>
+                  {% endif %}
+                  {% if product.is_featured %}
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-lime-100 text-lime-900">Featured</span>
+                  {% endif %}
+                </div>
+              </td>
+              <td class="p-4">
+                {% include 'cms/admin/partials/product_availability_toggle.html' with product=product %}
+              </td>
+              <td class="p-4 text-right pr-6 space-x-2">
+                <a href="{% url 'cms:product_edit' pk=product.pk %}" class="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs">
+                  Edit
+                </a>
+                <a href="{{ product.get_absolute_url }}" target="_blank" class="px-2 py-1.5 text-stone-400 hover:text-stone-700" title="View on store">
+                  ↗
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="p-8 text-center text-stone-400">No products found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

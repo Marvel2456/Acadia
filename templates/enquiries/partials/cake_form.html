@@ -1,0 +1,155 @@
+<div id="cake-form-wrapper" class="bg-white rounded-3xl border border-acadia-border p-6 sm:p-10 shadow-sm space-y-6">
+  
+  {% if form.non_field_errors %}
+    <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+      {% for err in form.non_field_errors %}
+        <p>{{ err }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Section 1: Customer Contact -->
+  <div class="space-y-4">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      1. Your Details
+    </h3>
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Full Name *
+      </label>
+      {{ form.customer_name }}
+      {% if form.customer_name.errors %}
+        <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.customer_name.errors.0 }}</p>
+      {% endif %}
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Email Address *
+        </label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Phone / WhatsApp Number *
+        </label>
+        {{ form.phone }}
+        {% if form.phone.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.phone.errors.0 }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Cake Specifications -->
+  <div class="space-y-4 pt-4 border-t border-stone-100">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      2. Cake Style &amp; Flavour
+    </h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Celebration Occasion *
+        </label>
+        {{ form.occasion }}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Cake Size / Servings *
+        </label>
+        {{ form.cake_size }}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Signature Cake Flavour *
+      </label>
+      {{ form.flavour }}
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Design Description &amp; Theme *
+      </label>
+      {{ form.design_description }}
+      {% if form.design_description.errors %}
+        <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.design_description.errors.0 }}</p>
+      {% endif %}
+      <p class="text-[11px] text-stone-400 mt-1">Specify colour palette, wording on cake, floral details, or aesthetic theme.</p>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Reference Photo or Sketch (Optional)
+      </label>
+      {{ form.reference_image }}
+      {% if form.reference_image.errors %}
+        <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.reference_image.errors.0 }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Section 3: Date, Fulfilment & Budget -->
+  <div class="space-y-4 pt-4 border-t border-stone-100">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      3. Timing, Delivery &amp; Budget
+    </h3>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Required Date * (Min. {{ site_settings.lead_time_cake_days }} days notice)
+        </label>
+        {{ form.requested_date }}
+        {% if form.requested_date.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.requested_date.errors.0 }}</p>
+        {% endif %}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Fulfilment Option *
+        </label>
+        {{ form.fulfilment_option }}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Delivery Address (if delivery selected)
+      </label>
+      {{ form.delivery_address }}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Budget Range *
+        </label>
+        {{ form.budget_range }}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Additional Notes
+        </label>
+        {{ form.additional_notes }}
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-6 border-t border-stone-200">
+    <button 
+      type="submit" 
+      class="w-full py-4 px-8 rounded-full bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+      <span>🎂</span>
+      <span>Submit Custom Cake Enquiry &rarr;</span>
+    </button>
+    <p class="text-xs text-stone-500 text-center mt-3">
+      Submitting this enquiry does not commit you to payment. We will review your request and contact you within 24 hours.
+    </p>
+  </div>
+
+</div>

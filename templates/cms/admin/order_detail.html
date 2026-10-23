@@ -1,0 +1,139 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load humanize %}
+
+{% block header_title %}Order {{ order.order_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6 max-w-5xl">
+  
+  <div class="flex items-center justify-between">
+    <a href="{% url 'cms:orders' %}" class="text-xs font-bold text-stone-500 hover:text-stone-900 flex items-center gap-1">
+      &larr; Back to All Orders
+    </a>
+    <span class="text-xs text-stone-400">Created: {{ order.created_at|date:"F d, Y @ H:i" }}</span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left Column: Order Items & Customer -->
+    <div class="lg:col-span-7 space-y-6">
+      
+      <!-- Customer Information Card -->
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-3">
+        <h2 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Customer &amp; Fulfilment</h2>
+        <div class="grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <span class="text-stone-400 block font-semibold">Name</span>
+            <p class="font-bold text-stone-900">{{ order.customer_name }}</p>
+          </div>
+          <div>
+            <span class="text-stone-400 block font-semibold">Contact</span>
+            <p class="font-bold text-stone-900">{{ order.customer_phone }}</p>
+            <p class="text-stone-500">{{ order.customer_email }}</p>
+          </div>
+          <div>
+            <span class="text-stone-400 block font-semibold">Fulfilment Type</span>
+            <p class="font-bold text-stone-900">{{ order.get_fulfilment_type_display }}</p>
+          </div>
+          <div>
+            <span class="text-stone-400 block font-semibold">Requested Date/Slot</span>
+            <p class="font-bold text-stone-900">{{ order.preferred_date|date:"M d, Y"|default:"Standard" }}</p>
+            <p class="text-stone-500">{{ order.preferred_time_slot }}</p>
+          </div>
+        </div>
+
+        {% if order.fulfilment_type == 'delivery' %}
+          <div class="pt-2 border-t border-stone-100 text-xs">
+            <span class="text-stone-400 block font-semibold">Delivery Address</span>
+            <p class="font-semibold text-stone-800">{{ order.delivery_address }}, {{ order.delivery_city }}</p>
+          </div>
+        {% endif %}
+
+        {% if order.special_notes %}
+          <div class="pt-2 border-t border-stone-100 text-xs">
+            <span class="text-stone-400 block font-semibold">Customer Notes / Allergies</span>
+            <p class="text-stone-700 bg-stone-50 p-2.5 rounded-xl">{{ order.special_notes }}</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Items Ordered Table -->
+      <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+        <div class="p-4 bg-stone-50 border-b border-stone-200 font-bold text-xs text-stone-700">
+          Order Line Items
+        </div>
+        <table class="w-full text-left text-xs">
+          <tbody class="divide-y divide-stone-100">
+            {% for item in order.items.all %}
+              <tr class="p-3">
+                <td class="p-4 font-bold text-stone-900">
+                  {{ item.product_name }}
+                  {% if item.variation_name %}
+                    <span class="block text-[11px] font-normal text-stone-500">{{ item.variation_name }}</span>
+                  {% endif %}
+                </td>
+                <td class="p-4 text-stone-500">{{ item.quantity }} &times; ₦{{ item.unit_price|intcomma }}</td>
+                <td class="p-4 text-right font-black text-stone-900">₦{{ item.subtotal|intcomma }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="p-4 bg-stone-50 border-t border-stone-200 space-y-1.5 text-xs text-right">
+          <p class="text-stone-500">Subtotal: <strong class="text-stone-900 font-bold">₦{{ order.subtotal_amount|intcomma }}</strong></p>
+          <p class="text-stone-500">Delivery Fee: <strong class="text-stone-900 font-bold">₦{{ order.delivery_fee|intcomma }}</strong></p>
+          <p class="text-sm font-black text-stone-900 pt-1 border-t border-stone-200">
+            Total Amount: ₦{{ order.total_amount|intcomma }}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Status & Operations Form -->
+    <div class="lg:col-span-5 bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-5">
+      <h2 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Staff Operations</h2>
+
+      <form method="POST" class="space-y-4 text-xs">
+        {% csrf_token %}
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Fulfilment Status
+          </label>
+          {{ form.fulfilment_status }}
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Payment Status
+          </label>
+          {{ form.payment_status }}
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Internal Staff / Kitchen Notes
+          </label>
+          {{ form.internal_notes }}
+        </div>
+
+        <button type="submit" class="w-full py-3 px-4 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl shadow transition-colors">
+          Update Order Status &rarr;
+        </button>
+      </form>
+
+      <div class="pt-4 border-t border-stone-100 text-xs text-stone-500 space-y-2">
+        <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+        {% if order.paystack_reference %}
+          <p><strong>Reference:</strong> <span class="font-mono text-stone-900">{{ order.paystack_reference }}</span></p>
+        {% endif %}
+        <a href="https://wa.me/{{ order.customer_phone }}?text=Hello%20{{ order.customer_name }}!%20This%20is%20Acadia%20regarding%20order%20{{ order.order_number }}" target="_blank" class="block text-center py-2 bg-emerald-50 text-emerald-700 font-bold rounded-xl border border-emerald-200 hover:bg-emerald-100">
+          WhatsApp Customer
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

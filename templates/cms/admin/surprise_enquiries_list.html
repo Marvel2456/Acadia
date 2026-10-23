@@ -1,0 +1,72 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load humanize %}
+
+{% block header_title %}Surprise Package Bookings{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+  
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+    <div class="p-5 border-b border-stone-100 flex items-center justify-between">
+      <div>
+        <h2 class="font-bold text-stone-900 text-sm">Surprise Gift Gifting Pipeline</h2>
+        <p class="text-xs text-stone-500">Scheduled surprise package deliveries across Lagos</p>
+      </div>
+      <span class="text-xs text-stone-500 font-bold">{{ enquiries.count }} Booking{{ enquiries.count|pluralize }}</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="bg-stone-50 border-b border-stone-200 text-stone-500 font-bold uppercase tracking-wider">
+            <th class="p-4 pl-6">Ref #</th>
+            <th class="p-4">Package</th>
+            <th class="p-4">Recipient</th>
+            <th class="p-4">Sender</th>
+            <th class="p-4">Delivery Date</th>
+            <th class="p-4">Card Message</th>
+            <th class="p-4 text-right pr-6">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+          {% for enq in enquiries %}
+            <tr class="hover:bg-stone-50/80 transition-colors">
+              <td class="p-4 pl-6 font-mono font-bold text-stone-900">
+                {{ enq.reference_number }}
+              </td>
+              <td class="p-4 font-bold text-stone-900">
+                {{ enq.package.name|default:"Custom Surprise Box" }}
+              </td>
+              <td class="p-4">
+                <p class="font-bold text-stone-900">{{ enq.recipient_name }}</p>
+                <p class="text-[11px] text-stone-400">{{ enq.recipient_phone }}</p>
+                <p class="text-[11px] text-stone-500 truncate max-w-xs">{{ enq.delivery_address }}</p>
+              </td>
+              <td class="p-4">
+                <p class="font-bold text-stone-900">{{ enq.sender_name }}</p>
+                <p class="text-[11px] text-stone-400">{{ enq.sender_phone }}</p>
+              </td>
+              <td class="p-4 font-bold text-emerald-800">
+                {{ enq.delivery_date|date:"F d, Y" }}
+              </td>
+              <td class="p-4 text-stone-600 max-w-xs truncate italic">
+                "{{ enq.personal_card_message|default:'No custom message' }}"
+              </td>
+              <td class="p-4 text-right pr-6">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900">
+                  {{ enq.get_status_display }}
+                </span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="p-8 text-center text-stone-400">No surprise gift bookings yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

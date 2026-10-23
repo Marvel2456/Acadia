@@ -1,0 +1,227 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load static %}
+
+{% block header_title %}Site Settings &amp; Business Configuration{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6 max-w-4xl">
+  
+  <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm space-y-6">
+    <div>
+      <h2 class="font-bold text-stone-900 text-lg">Business &amp; Brand Settings</h2>
+      <p class="text-xs text-stone-500">Configure brand logos, store contact details, delivery policies, and payment credentials.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-8 text-xs">
+      {% csrf_token %}
+
+      <!-- Section: Brand Logo & Artwork Selection -->
+      <div class="space-y-4 p-5 rounded-2xl bg-acadia-cream/50 border border-acadia-border">
+        <h3 class="font-bold text-stone-900 text-sm">Active Brand Logo Variation</h3>
+        <p class="text-stone-600">Select which preserved brand logo variant to display in the website header and footer:</p>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="p-3 bg-white rounded-xl border border-stone-200 text-center space-y-2">
+            <img src="{% static 'images/logos/acadia-script-character.svg' %}" alt="Script Character" class="h-10 mx-auto">
+            <p class="font-bold text-[11px] text-stone-800">1. Script &amp; Character</p>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-stone-200 text-center space-y-2">
+            <img src="{% static 'images/logos/acadia-badge.svg' %}" alt="Standard Badge" class="h-10 mx-auto">
+            <p class="font-bold text-[11px] text-stone-800">2. Cream Badge</p>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-stone-200 text-center space-y-2">
+            <img src="{% static 'images/logos/acadia-badge-lavender.svg' %}" alt="Lavender Badge" class="h-10 mx-auto">
+            <p class="font-bold text-[11px] text-stone-800">3. Lavender Badge</p>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-stone-200 text-center space-y-2">
+            <img src="{% static 'images/logos/acadia-wordmark-orange.svg' %}" alt="Orange Wordmark" class="h-10 mx-auto">
+            <p class="font-bold text-[11px] text-stone-800">4. Orange Script</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Active Logo Choice *
+            </label>
+            {{ settings_form.active_logo }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Custom Logo Upload
+            </label>
+            {{ settings_form.custom_logo }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Contact Details -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Business &amp; Contact Information</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Business Name
+            </label>
+            {{ settings_form.business_name }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Tagline
+            </label>
+            {{ settings_form.tagline }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Phone Number
+            </label>
+            {{ settings_form.phone }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              WhatsApp Number (e.g. 2348123456789)
+            </label>
+            {{ settings_form.whatsapp_number }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Customer Email
+            </label>
+            {{ settings_form.email }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Bakery Physical Address
+            </label>
+            {{ settings_form.address }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Opening Hours
+          </label>
+          {{ settings_form.opening_hours }}
+        </div>
+      </div>
+
+      <!-- Section: Delivery & Lead Time Rules -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Order Policies &amp; Delivery Fees</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Custom Cake Notice (Days)
+            </label>
+            {{ settings_form.lead_time_cake_days }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Surprise Packages Notice (Hours)
+            </label>
+            {{ settings_form.lead_time_packages_hours }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Standard Lagos Delivery Fee (₦)
+            </label>
+            {{ settings_form.standard_delivery_fee }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Free Delivery Order Threshold (₦)
+            </label>
+            {{ settings_form.free_delivery_threshold }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Bank Transfer Credentials -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Bank Transfer Details</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Bank Name
+            </label>
+            {{ settings_form.bank_name }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Account Number
+            </label>
+            {{ settings_form.account_number }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Account Name
+            </label>
+            {{ settings_form.account_name }}
+          </div>
+        </div>
+        <label class="flex items-center gap-2 font-bold text-stone-800 cursor-pointer pt-1">
+          {{ settings_form.allow_bank_transfer }}
+          <span>Accept Direct Bank Transfers</span>
+        </label>
+      </div>
+
+      <!-- Section: Paystack Online Payment -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Paystack Online Payment Gateway</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Paystack Public Key
+            </label>
+            {{ settings_form.paystack_public_key }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Paystack Secret Key
+            </label>
+            {{ settings_form.paystack_secret_key }}
+          </div>
+        </div>
+        <label class="flex items-center gap-2 font-bold text-stone-800 cursor-pointer pt-1">
+          {{ settings_form.allow_paystack }}
+          <span>Enable Online Paystack Card &amp; USSD Payments</span>
+        </label>
+      </div>
+
+      <!-- Section: Social Media -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Social Media Links</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Instagram URL
+            </label>
+            {{ settings_form.instagram_url }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              TikTok URL
+            </label>
+            {{ settings_form.tiktok_url }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Facebook URL
+            </label>
+            {{ settings_form.facebook_url }}
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-stone-200">
+        <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl shadow transition-colors">
+          Save Settings &amp; Configuration &rarr;
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

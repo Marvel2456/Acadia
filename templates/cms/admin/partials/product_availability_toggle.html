@@ -1,0 +1,6 @@
+<form hx-post="{% url 'cms:product_toggle' pk=product.pk %}" hx-swap="outerHTML" class="inline">
+  {% csrf_token %}
+  <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all {% if product.is_available %}bg-emerald-100 text-emerald-800 hover:bg-emerald-200{% else %}bg-rose-100 text-rose-800 hover:bg-rose-200{% endif %}">
+    {% if product.is_available %}● Available{% else %}○ Hidden / Sold Out{% endif %}
+  </button>
+</form>

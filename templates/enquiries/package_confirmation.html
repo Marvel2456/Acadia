@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Surprise Package Request #{{ enquiry.reference_number }} — Acadia Lagos{% endblock %}
+
+{% block content %}
+<div class="py-16 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+  {% include 'enquiries/partials/package_request_success.html' with enquiry=enquiry site_settings=site_settings %}
+</div>
+{% endblock %}

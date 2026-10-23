@@ -1,0 +1,105 @@
+{% extends 'cms/admin/base_admin.html' %}
+
+{% block header_title %}Product Categories{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-8 max-w-5xl">
+  
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left Column: Existing Categories List -->
+    <div class="lg:col-span-7 bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+      <div class="p-5 border-b border-stone-100 flex items-center justify-between">
+        <div>
+          <h2 class="font-bold text-stone-900 text-sm">Active Categories</h2>
+          <p class="text-xs text-stone-500">Categories organize products across the store</p>
+        </div>
+        <span class="text-xs text-stone-500 font-bold">{{ categories.count }} Categories</span>
+      </div>
+
+      <div class="divide-y divide-stone-100 text-xs">
+        {% for cat in categories %}
+          <div class="p-4 flex items-center justify-between hover:bg-stone-50 transition-colors">
+            <div class="flex items-center gap-3">
+              {% if cat.image %}
+                <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-10 h-10 rounded-xl object-cover border border-stone-200">
+              {% else %}
+                <div class="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-lg">📁</div>
+              {% endif %}
+              <div>
+                <p class="font-bold text-stone-900 text-sm">{{ cat.name }}</p>
+                <p class="text-stone-400 text-[11px]">{{ cat.product_count }} product{{ cat.product_count|pluralize }}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if cat.is_active %}bg-emerald-100 text-emerald-800{% else %}bg-stone-100 text-stone-600{% endif %}">
+                {% if cat.is_active %}Active{% else %}Inactive{% endif %}
+              </span>
+              <a href="{{ cat.get_absolute_url }}" target="_blank" class="text-stone-400 hover:text-stone-900 px-2 py-1">
+                ↗
+              </a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="p-6 text-center text-stone-400">No categories found.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Right Column: Add Category Form -->
+    <div class="lg:col-span-5 bg-white rounded-2xl border border-stone-200 p-6 shadow-sm space-y-4">
+      <h2 class="font-bold text-stone-900 text-sm border-b border-stone-100 pb-2">Add New Category</h2>
+
+      <form method="POST" enctype="multipart/form-data" class="space-y-4 text-xs">
+        {% csrf_token %}
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Category Name *
+          </label>
+          {{ form.name }}
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Description
+          </label>
+          {{ form.description }}
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Category Banner Image
+          </label>
+          {{ form.image }}
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Icon Keyword
+            </label>
+            {{ form.icon_name }}
+          </div>
+          <div>
+            <label class="block font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Display Order
+            </label>
+            {{ form.display_order }}
+          </div>
+        </div>
+
+        <label class="flex items-center gap-2 font-bold text-stone-800 cursor-pointer pt-2">
+          {{ form.is_active }}
+          <span>Active on Store</span>
+        </label>
+
+        <button type="submit" class="w-full py-3 px-4 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl shadow transition-colors">
+          Create Category &rarr;
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 100" width="340" height="100" fill="none">
+  <!-- Warm Orange Script Wordmark -->
+  <g transform="translate(10, 15)">
+    <!-- Shadow offset for depth -->
+    <text x="3" y="59" font-family="'Playfair Display', 'Brush Script MT', 'Dancing Script', serif" font-size="64" font-weight="900" font-style="italic" fill="#171717" fill-opacity="0.12" letter-spacing="-1">
+      Acadia
+    </text>
+    <!-- Main text in warm orange -->
+    <text x="0" y="56" font-family="'Playfair Display', 'Brush Script MT', 'Dancing Script', serif" font-size="64" font-weight="900" font-style="italic" fill="#FFBD55" stroke="#171717" stroke-width="1.5" letter-spacing="-1">
+      Acadia
+    </text>
+    
+    <!-- Playful accent swirl & star -->
+    <path d="M190,44 Q210,32 218,48 Q222,58 240,50" stroke="#E8A9EF" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M250,38 L252,44 L258,45 L253,49 L255,55 L250,51 L245,55 L247,49 L242,45 L248,44 Z" fill="#E0E77A" stroke="#171717" stroke-width="1"/>
+    
+    <!-- Sub-tagline -->
+    <text x="4" y="78" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="11" font-weight="800" letter-spacing="3.5" fill="#171717">
+      ARTISAN BAKES &amp; FOODS
+    </text>
+    
+    <!-- Underline bar -->
+    <rect x="4" y="82" width="220" height="3" rx="1.5" fill="#E0E77A"/>
+  </g>
+</svg>

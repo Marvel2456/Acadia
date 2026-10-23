@@ -1,0 +1,114 @@
+/* ==========================================================================
+   ACADIA ARTISAN BAKERY DESIGN SYSTEM & CUSTOM UTILITIES
+   ========================================================================== */
+
+:root {
+  --color-lime: #E0E77A;
+  --color-lavender: #E8A9EF;
+  --color-orange: #FFBD55;
+  --color-cream: #FFFBEF;
+  --color-charcoal: #171717;
+  --color-bg: #FFFCF7;
+  --color-card-border: #F3ECE2;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-charcoal);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans-ui {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom Soft Shadows & Glassmorphism */
+.shadow-acadia-soft {
+  box-shadow: 0 10px 30px -5px rgba(23, 23, 23, 0.05), 0 4px 12px -2px rgba(23, 23, 23, 0.02);
+}
+
+.shadow-acadia-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shadow-acadia-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px rgba(255, 189, 85, 0.18), 0 8px 16px -4px rgba(23, 23, 23, 0.06);
+}
+
+/* Reusable Brand Pill Badges */
+.badge-lime {
+  background-color: #E0E77A;
+  color: #171717;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.badge-lavender {
+  background-color: #E8A9EF;
+  color: #171717;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.badge-orange {
+  background-color: #FFBD55;
+  color: #171717;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFBEF;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5DCCF;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FFBD55;
+}
+
+/* HTMX Transition animations */
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+}
+.htmx-request .htmx-indicator {
+  opacity: 1;
+}
+.htmx-request.htmx-indicator {
+  opacity: 1;
+}
+
+/* Shimmer skeleton for image loading */
+.img-shimmer {
+  background: linear-gradient(90deg, #F3ECE2 0%, #FFFBEF 50%, #F3ECE2 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

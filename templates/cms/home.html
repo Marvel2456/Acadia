@@ -1,0 +1,463 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}Acadia — Freshly Baked Treats, Celebration Cakes &amp; Food Bistro Lagos{% endblock %}
+
+{% block content %}
+<!-- ==========================================
+     HERO SECTION
+     ========================================== -->
+<section class="relative overflow-hidden pt-6 pb-16 lg:pt-12 lg:pb-24 bg-gradient-to-b from-acadia-bg via-acadia-cream/50 to-acadia-bg">
+  <!-- Subtle decorative background blurs -->
+  <div class="absolute -top-24 -left-24 w-96 h-96 bg-acadia-lime/30 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute top-1/2 -right-24 w-96 h-96 bg-acadia-lavender/30 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Left Column: Copy & CTAs -->
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        
+        <!-- Brand Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-acadia-lime/70 text-acadia-charcoal text-xs font-black uppercase tracking-wider shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-stone-900"></span>
+          {{ hero.badge_text|default:"Handcrafted Fresh Daily in Lagos" }}
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-stone-900 leading-[1.1] tracking-tight">
+          A Little Sweetness.<br>
+          <span class="text-acadia-orange underline decoration-acadia-lavender/60 decoration-wavy decoration-2">A Lot of Love.</span>
+        </h1>
+
+        <!-- Supporting Copy -->
+        <p class="text-base sm:text-lg lg:text-xl text-stone-700 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          {{ hero.subheadline|default:"From freshly baked treats and delicious meals to beautiful celebration cakes and thoughtful surprise packages, Acadia makes every moment taste special." }}
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+          <a href="{{ hero.primary_cta_url|default:'/shop/' }}" class="w-full sm:w-auto px-8 py-4 bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-black text-base rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all text-center">
+            {{ hero.primary_cta_text|default:"Explore Our Menu" }}
+          </a>
+          <a href="{{ hero.secondary_cta_url|default:'/custom-cakes/' }}" class="w-full sm:w-auto px-8 py-4 bg-white hover:bg-stone-50 border-2 border-stone-200 text-stone-900 font-bold text-base rounded-full shadow-sm hover:shadow transition-all text-center">
+            {{ hero.secondary_cta_text|default:"Order a Custom Cake" }}
+          </a>
+        </div>
+
+        <!-- Micro Feature Badges -->
+        <div class="pt-6 border-t border-stone-200/80 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs font-bold text-stone-600">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Baked Fresh Every Dawn
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Doorstep Lagos Delivery
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            100% Butter &amp; Pure Flavours
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Food Imagery Showcase -->
+      <div class="lg:col-span-5 relative">
+        <div class="relative mx-auto max-w-md lg:max-w-none">
+          <!-- Main Hero Spread Card -->
+          <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+            <img 
+              src="{% static 'images/hero-spread.jpg' %}" 
+              alt="Acadia Artisan Bakery Tabletop Spread with Cakes, Pastries and Tarts" 
+              class="w-full h-80 sm:h-96 lg:h-[460px] object-cover"
+              loading="eager">
+          </div>
+
+          <!-- Floating Badge 1: Lavender Stamp -->
+          <div class="absolute -bottom-6 -left-6 sm:-left-8 bg-white p-3 sm:p-4 rounded-3xl shadow-xl border border-stone-200 flex items-center gap-3 animate-pulse-slow">
+            <img src="{% static 'images/logos/acadia-badge-lavender.svg' %}" alt="Acadia Seal" class="w-12 h-12 sm:w-14 sm:h-14">
+            <div>
+              <p class="text-[10px] font-black uppercase tracking-wider text-stone-400">Occasion Treats</p>
+              <p class="text-xs sm:text-sm font-black text-stone-900">Custom Cakes &amp; Gifts</p>
+            </div>
+          </div>
+
+          <!-- Floating Badge 2: Daily Warm Bake -->
+          <div class="absolute -top-4 -right-4 sm:-right-6 bg-acadia-orange text-acadia-charcoal px-4 py-2.5 rounded-2xl shadow-lg font-black text-xs sm:text-sm border-2 border-white flex items-center gap-2">
+            <span>✨</span> Fresh Bakes Daily
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     PROMOTIONAL BANNER
+     ========================================== -->
+{% if banner %}
+  <section class="bg-acadia-lime border-y border-stone-900/10 py-3.5 px-4 text-center">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm font-bold text-acadia-charcoal">
+      <span>🎉 {{ banner.title }}</span>
+      {% if banner.subtitle %}
+        <span class="hidden md:inline font-medium text-stone-700">{{ banner.subtitle }}</span>
+      {% endif %}
+      <a href="{{ banner.button_url }}" class="underline font-black hover:text-stone-900">
+        {{ banner.button_text }} &rarr;
+      </a>
+    </div>
+  </section>
+{% endif %}
+
+<!-- ==========================================
+     FEATURED CATEGORIES
+     ========================================== -->
+<section class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+    <div>
+      <span class="badge-lavender text-xs uppercase tracking-wider font-extrabold">Crafted For Every Craving</span>
+      <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900 mt-2">
+        Explore Acadia's Kitchen
+      </h2>
+    </div>
+    <a href="{% url 'catalog:product_list' %}" class="inline-flex items-center gap-1.5 text-sm font-bold text-stone-800 hover:text-acadia-orange transition-colors">
+      <span>View All Menu Categories</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    {% for cat in categories %}
+      <a href="{{ cat.get_absolute_url }}" class="group relative overflow-hidden rounded-3xl bg-white border border-acadia-border p-6 shadow-acadia-soft hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+        
+        <!-- Image Area -->
+        <div class="relative overflow-hidden rounded-2xl aspect-[16/10] mb-5 bg-acadia-cream">
+          {% if cat.image %}
+            <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center text-4xl bg-acadia-cream">
+              🥐
+            </div>
+          {% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent"></div>
+          <span class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-stone-900 shadow-sm">
+            {{ cat.products.count }} Items
+          </span>
+        </div>
+
+        <!-- Info -->
+        <div>
+          <h3 class="font-display text-xl font-bold text-stone-900 group-hover:text-acadia-orange transition-colors mb-2">
+            {{ cat.name }}
+          </h3>
+          <p class="text-xs sm:text-sm text-stone-600 line-clamp-2 leading-relaxed">
+            {{ cat.description }}
+          </p>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-stone-800 group-hover:text-stone-950">
+          <span>Browse Selection</span>
+          <span class="w-7 h-7 rounded-full bg-acadia-cream group-hover:bg-acadia-orange flex items-center justify-center transition-colors">
+            &rarr;
+          </span>
+        </div>
+
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ==========================================
+     BESTSELLERS
+     ========================================== -->
+<section class="py-16 lg:py-24 bg-acadia-cream/60 border-y border-acadia-border/70">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      <div>
+        <span class="badge-orange text-xs uppercase tracking-wider font-extrabold">Popular &amp; Beloved</span>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900 mt-2">
+          Customer Bestsellers
+        </h2>
+      </div>
+      <p class="text-xs sm:text-sm text-stone-600 max-w-md">
+        The recipes our customers keep coming back for. Handcrafted every morning with pure ingredients.
+      </p>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {% for product in bestsellers %}
+        {% include 'partials/product_card.html' with product=product %}
+      {% empty %}
+        <p class="text-stone-500 text-sm col-span-full">Explore our shop menu for full selection.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     CUSTOM CAKE SHOWCASE
+     ========================================== -->
+<section class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="bg-gradient-to-br from-acadia-cream via-white to-acadia-lavender/20 rounded-[2.5rem] border border-acadia-border p-8 sm:p-12 lg:p-16 shadow-xl relative overflow-hidden">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      
+      <!-- Text Side -->
+      <div class="lg:col-span-7 space-y-6">
+        <span class="badge-lavender text-xs uppercase tracking-wider font-extrabold">Bespoke Celebrations</span>
+        <h2 class="font-display text-3xl sm:text-5xl font-black text-stone-900 leading-tight">
+          Your Dream Cake,<br>Made Beautiful.
+        </h2>
+        <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-normal">
+          Whether you are celebrating a milestone birthday, a fairy-tale wedding, an anniversary, or a graduation, Acadia crafts custom cakes tailored specifically to your visual aesthetic and flavour dreams.
+        </p>
+
+        <!-- Feature List -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm font-semibold text-stone-800">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-acadia-orange/30 flex items-center justify-center text-stone-900">✓</span>
+            Bespoke Tiered &amp; Bento Designs
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-acadia-orange/30 flex items-center justify-center text-stone-900">✓</span>
+            Over 8 Gourmet Flavour Combinations
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-acadia-orange/30 flex items-center justify-center text-stone-900">✓</span>
+            Photo &amp; Sketch Reference Matching
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-acadia-orange/30 flex items-center justify-center text-stone-900">✓</span>
+            Secure Temperature-Controlled Delivery
+          </div>
+        </div>
+
+        <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
+          <a href="{% url 'enquiries:custom_cake' %}" class="w-full sm:w-auto px-8 py-4 bg-acadia-charcoal hover:bg-stone-800 text-white font-bold text-sm rounded-full shadow-lg transition-all text-center">
+            Request a Custom Cake Quote &rarr;
+          </a>
+          <span class="text-xs text-stone-500 font-medium">Minimum {{ site_settings.lead_time_cake_days }} days notice required</span>
+        </div>
+      </div>
+
+      <!-- Image Side -->
+      <div class="lg:col-span-5 relative">
+        <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white aspect-[4/5]">
+          <img src="{% static 'images/categories/custom-cakes.jpg' %}" alt="Bespoke Acadia Celebration Cake" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     SURPRISE PACKAGES
+     ========================================== -->
+<section class="py-16 lg:py-24 bg-acadia-cream/40 border-t border-acadia-border/70">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+      <span class="badge-lime text-xs uppercase tracking-wider font-extrabold">Thoughtful Gifting</span>
+      <h2 class="font-display text-3xl sm:text-5xl font-black text-stone-900">
+        Make Someone's Day Extra Special.
+      </h2>
+      <p class="text-sm sm:text-base text-stone-600 leading-relaxed">
+        Curated surprise packages filled with delightful mini bento cakes, gourmet cupcakes, chocolates, handwritten greeting notes, and festive ribbons.
+      </p>
+    </div>
+
+    <!-- Surprise Packages Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for pkg in surprise_packages %}
+        <div class="bg-white rounded-3xl border border-acadia-border overflow-hidden shadow-acadia-soft flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+          
+          <div class="relative aspect-[4/3] bg-acadia-cream overflow-hidden">
+            {% if pkg.image %}
+              <img src="{{ pkg.image.url }}" alt="{{ pkg.name }}" class="w-full h-full object-cover" loading="lazy">
+            {% else %}
+              <div class="w-full h-full flex items-center justify-center text-4xl">🎁</div>
+            {% endif %}
+            <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black text-stone-900 shadow-sm">
+              From ₦{{ pkg.starting_price|intcomma }}
+            </span>
+          </div>
+
+          <div class="p-6 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="font-display text-xl font-bold text-stone-900 mb-2">
+                {{ pkg.name }}
+              </h3>
+              <p class="text-xs text-stone-600 mb-4 leading-relaxed">
+                {{ pkg.short_description }}
+              </p>
+
+              <!-- Items Included Preview -->
+              <div class="bg-stone-50 rounded-2xl p-3 mb-4">
+                <span class="text-[11px] font-bold text-stone-400 uppercase tracking-wider block mb-1">What's Inside</span>
+                <ul class="text-xs text-stone-700 space-y-1 font-medium">
+                  {% for item in pkg.get_items_list|slice:":3" %}
+                    <li class="flex items-center gap-1.5 truncate">
+                      <span class="text-acadia-orange">•</span> {{ item }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <a href="{% url 'enquiries:package_detail' slug=pkg.slug %}" class="w-full block text-center py-3 bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-bold text-xs rounded-xl shadow-sm transition-colors">
+                Plan This Surprise &rarr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="{% url 'enquiries:surprise_packages' %}" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-800 font-bold text-sm rounded-full shadow-sm transition-all">
+        <span>View All Surprise Packages &amp; Add-ons</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     OCCASIONS SECTION
+     ========================================== -->
+<section class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="text-center max-w-xl mx-auto mb-12 space-y-3">
+    <span class="badge-lavender text-xs uppercase tracking-wider font-extrabold">Celebrate Life</span>
+    <h2 class="font-display text-3xl sm:text-4xl font-black text-stone-900">
+      Treats for Every Occasion
+    </h2>
+    <p class="text-xs sm:text-sm text-stone-600">
+      Select an occasion to find perfectly matched bakes, savoury bistro dishes, and celebratory gift boxes.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+    {% for occ in occasions %}
+      <a href="{{ occ.get_absolute_url }}" class="group bg-white rounded-2xl border border-acadia-border p-4 text-center shadow-sm hover:shadow-md hover:border-acadia-orange hover:-translate-y-1 transition-all">
+        <div class="w-12 h-12 mx-auto rounded-full bg-acadia-cream group-hover:bg-acadia-orange/30 flex items-center justify-center text-2xl mb-2.5 transition-colors">
+          {% if occ.slug == 'birthdays' %}🎂
+          {% elif occ.slug == 'weddings-anniversaries' %}💍
+          {% elif occ.slug == 'graduations' %}🎓
+          {% elif occ.slug == 'celebrations' %}🎉
+          {% elif occ.slug == 'corporate-gifts' %}💼
+          {% else %}✨{% endif %}
+        </div>
+        <h4 class="text-xs font-bold text-stone-900 group-hover:text-acadia-orange transition-colors">
+          {{ occ.name }}
+        </h4>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ==========================================
+     BRAND STORY PREVIEW
+     ========================================== -->
+<section class="py-16 lg:py-24 bg-white border-y border-acadia-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-6 relative">
+        <div class="rounded-3xl overflow-hidden shadow-xl aspect-[4/3]">
+          <img src="{% static 'images/categories/baked-treats.jpg' %}" alt="Acadia Bakery Kitchen and Pastries" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-6">
+        <span class="badge-lime text-xs uppercase tracking-wider font-extrabold">The Acadia Philosophy</span>
+        <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900 leading-tight">
+          Baked With Love,<br>Seasoned With Care.
+        </h2>
+        <p class="text-stone-700 text-sm sm:text-base leading-relaxed">
+          {{ site_settings.about_story_short }}
+        </p>
+        <p class="text-stone-600 text-xs sm:text-sm leading-relaxed">
+          Whether you are dropping in for morning croissants, ordering comforting bistro meals for family lunch, commissioning a luxury celebration cake, or sending a surprise package to someone across town, we pour pure passion into every single box.
+        </p>
+        <div class="pt-2">
+          <a href="{% url 'cms:about' %}" class="inline-flex items-center gap-2 text-stone-900 font-bold text-sm underline hover:text-acadia-orange transition-colors">
+            Read Our Complete Brand Story &rarr;
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================
+     TESTIMONIALS (CMS Verified Only)
+     ========================================== -->
+{% if has_testimonials %}
+<section class="py-16 lg:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="text-center max-w-xl mx-auto mb-12 space-y-3">
+    <span class="badge-orange text-xs uppercase tracking-wider font-extrabold">Customer Love</span>
+    <h2 class="font-display text-3xl sm:text-4xl font-black text-stone-900">
+      Real Words from Our Community
+    </h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for test in testimonials %}
+      <div class="bg-white rounded-3xl border border-acadia-border p-6 shadow-sm space-y-4">
+        <div class="text-amber-400 text-sm">★★★★★</div>
+        <p class="text-xs sm:text-sm text-stone-700 italic leading-relaxed">
+          "{{ test.review_text }}"
+        </p>
+        <div class="pt-2 border-t border-stone-100 flex items-center justify-between">
+          <span class="text-xs font-bold text-stone-900">{{ test.customer_name }}</span>
+          <span class="text-[11px] text-stone-500">{{ test.customer_role_or_occasion }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- ==========================================
+     NEWSLETTER SIGNUP
+     ========================================== -->
+<section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="bg-acadia-cream rounded-3xl border border-acadia-border p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-4">
+    <span class="text-3xl">💌</span>
+    <h3 class="font-display text-2xl sm:text-3xl font-black text-stone-900">
+      Join the Acadia Sweet Club
+    </h3>
+    <p class="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
+      Subscribe for secret seasonal cake releases, promotional treats, and same-day bistro specials straight to your inbox.
+    </p>
+
+    <form hx-post="{% url 'cms:newsletter_subscribe' %}" hx-target="#newsletter-feedback" hx-swap="innerHTML" class="max-w-md mx-auto flex flex-col sm:flex-row gap-2 pt-2">
+      {% csrf_token %}
+      <input 
+        type="email" 
+        name="email" 
+        required 
+        placeholder="Enter your email address" 
+        class="flex-grow px-4 py-3 rounded-full border border-stone-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-acadia-orange bg-white">
+      <button 
+        type="submit" 
+        class="px-6 py-3 rounded-full bg-acadia-charcoal hover:bg-stone-800 text-white font-bold text-xs sm:text-sm transition-all flex-shrink-0">
+        Subscribe
+      </button>
+    </form>
+    <div id="newsletter-feedback"></div>
+  </div>
+</section>
+{% endblock %}

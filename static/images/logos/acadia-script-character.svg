@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 120" width="460" height="120" fill="none">
+  <!-- Character: Cheerful Little Baker -->
+  <g id="character" transform="translate(15, 10)">
+    <!-- Chef Hat -->
+    <path d="M45,28 C38,12 55,5 65,14 C75,5 92,10 88,26 C98,28 98,40 85,42 C85,42 45,42 45,28 Z" fill="#FFFBEF" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M52,38 L82,38" stroke="#FFBD55" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <!-- Face / Head (Round pastry / macaron bun) -->
+    <ellipse cx="66" cy="58" rx="28" ry="24" fill="#FFBD55" stroke="#171717" stroke-width="2.5"/>
+    <ellipse cx="66" cy="62" rx="24" ry="18" fill="#FFFBEF"/>
+    
+    <!-- Rosy Cheeks -->
+    <ellipse cx="50" cy="64" rx="4" ry="2.5" fill="#E8A9EF"/>
+    <ellipse cx="82" cy="64" rx="4" ry="2.5" fill="#E8A9EF"/>
+    
+    <!-- Eyes -->
+    <path d="M54,58 Q58,54 62,58" stroke="#171717" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <path d="M70,58 Q74,54 78,58" stroke="#171717" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Cheerful Smile -->
+    <path d="M62,65 Q66,71 70,65" stroke="#171717" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <polygon points="66,69 64,72 68,72" fill="#E8A9EF"/>
+    
+    <!-- Baker Whisk in hand -->
+    <g transform="translate(86, 50) rotate(22)">
+      <!-- handle -->
+      <rect x="0" y="24" width="3" height="18" rx="1.5" fill="#171717"/>
+      <ellipse cx="1.5" cy="14" rx="7" ry="12" fill="none" stroke="#171717" stroke-width="2"/>
+      <line x1="1.5" y1="2" x2="1.5" y2="24" stroke="#171717" stroke-width="1.8"/>
+      <ellipse cx="1.5" cy="14" rx="3.5" ry="10" fill="none" stroke="#FFBD55" stroke-width="1.5"/>
+    </g>
+    <!-- Little Apron / Bow -->
+    <path d="M60,82 C55,84 50,96 50,98 L82,98 C82,96 77,84 72,82 Z" fill="#E0E77A" stroke="#171717" stroke-width="2"/>
+    <polygon points="63,82 66,85 69,82" fill="#E8A9EF"/>
+  </g>
+
+  <!-- Script Wordmark "Acadia" -->
+  <g id="wordmark" transform="translate(130, 25)">
+    <!-- Stylized script Acadia text -->
+    <text x="0" y="58" font-family="'Playfair Display', 'Brush Script MT', 'Dancing Script', serif" font-size="64" font-weight="800" font-style="italic" fill="#171717" letter-spacing="-1">
+      Acadia
+    </text>
+    <!-- Flourish underline -->
+    <path d="M5,68 Q110,82 225,66 Q245,63 260,68" stroke="#FFBD55" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    <circle cx="265" cy="67" r="3" fill="#E8A9EF"/>
+    
+    <!-- Sub-tagline -->
+    <text x="8" y="85" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="12" font-weight="700" letter-spacing="4" fill="#171717" opacity="0.8">
+      BAKES • MEALS • SURPRISES
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Order Confirmed #{{ order.order_number }} — Acadia Lagos{% endblock %}
+
+{% block content %}
+<div class="py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <!-- Success Hero Card -->
+  <div class="bg-white rounded-3xl border border-acadia-border p-8 sm:p-12 shadow-sm text-center space-y-4 mb-8">
+    <div class="w-20 h-20 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-4xl shadow-sm">
+      ✨
+    </div>
+    <span class="badge-lime text-xs font-black uppercase tracking-wider">Order Received</span>
+    <h1 class="font-display text-3xl sm:text-4xl font-black text-stone-900">
+      Thank You, {{ order.customer_name }}!
+    </h1>
+    <p class="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
+      Your order has been recorded. Our bakery team is preparing everything with love.
+    </p>
+
+    <!-- Reference Pill -->
+    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-acadia-cream border border-acadia-border text-xs sm:text-sm font-bold text-stone-900">
+      <span>Order Number:</span>
+      <span class="font-mono text-base font-black text-acadia-charcoal">{{ order.order_number }}</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+    
+    <!-- Left Column: Payment & Fulfilment Details -->
+    <div class="md:col-span-7 space-y-6">
+      
+      <!-- Payment Instructions Card -->
+      <div class="bg-white rounded-3xl border border-acadia-border p-6 shadow-sm space-y-4">
+        <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+          Payment Instructions
+        </h3>
+
+        {% if order.payment_method == 'bank_transfer' %}
+          <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/60 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-900">Direct Bank Transfer</span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+                {{ order.get_payment_status_display }}
+              </span>
+            </div>
+            <p class="text-xs text-amber-900 leading-relaxed">
+              Please transfer the exact total of <strong class="font-bold text-sm">₦{{ order.total_amount|intcomma }}</strong> to the bakery account below:
+            </p>
+            <div class="bg-white p-3 rounded-xl border border-amber-200 text-xs space-y-1 font-mono text-stone-800">
+              <p><strong>Bank:</strong> {{ site_settings.bank_name }}</p>
+              <p><strong>Account Name:</strong> {{ site_settings.account_name }}</p>
+              <p class="flex items-center justify-between">
+                <span><strong>Account Number:</strong> {{ site_settings.account_number }}</span>
+                <button onclick="navigator.clipboard.writeText('{{ site_settings.account_number }}'); alert('Account number copied!');" class="text-xs text-acadia-orange font-bold hover:underline">
+                  Copy
+                </button>
+              </p>
+            </div>
+            <p class="text-[11px] text-stone-500">
+              Kindly use <strong class="text-stone-800">{{ order.order_number }}</strong> as your payment narration.
+            </p>
+          </div>
+        {% elif order.payment_method == 'paystack' %}
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-900">Paystack Online Payment</span>
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full {% if order.payment_status == 'paid' %}bg-emerald-200 text-emerald-900{% else %}bg-amber-100 text-amber-900{% endif %}">
+                {{ order.get_payment_status_display }}
+              </span>
+            </div>
+            {% if order.payment_status == 'paid' %}
+              <p class="text-xs text-emerald-800 font-medium">
+                Payment verified successfully via Paystack. Your receipt has been sent to {{ order.customer_email }}.
+              </p>
+            {% else %}
+              <p class="text-xs text-stone-600">
+                Payment pending verification. Reference: {{ order.order_number }}
+              </p>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-1 text-xs text-stone-700">
+            <p class="font-bold text-stone-900">Pay on Store Pickup</p>
+            <p>Please pay with cash or debit card when collecting your order at our Lekki bakery store.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Fulfilment Info -->
+      <div class="bg-white rounded-3xl border border-acadia-border p-6 shadow-sm space-y-3">
+        <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+          Fulfilment Details
+        </h3>
+        <div class="space-y-2 text-xs text-stone-700">
+          <p><strong>Option:</strong> {{ order.get_fulfilment_type_display }}</p>
+          {% if order.fulfilment_type == 'delivery' %}
+            <p><strong>Delivery Address:</strong> {{ order.delivery_address }}, {{ order.delivery_city }}</p>
+          {% else %}
+            <p><strong>Pickup Location:</strong> {{ site_settings.address }}</p>
+          {% endif %}
+          {% if order.preferred_date %}
+            <p><strong>Requested Date:</strong> {{ order.preferred_date|date:"F d, Y" }} ({{ order.preferred_time_slot }})</p>
+          {% endif %}
+          <p><strong>Status:</strong> <span class="font-bold text-stone-900">{{ order.get_fulfilment_status_display }}</span></p>
+          {% if order.special_notes %}
+            <p><strong>Notes:</strong> {{ order.special_notes }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Order Items Summary -->
+    <div class="md:col-span-5 bg-white rounded-3xl border border-acadia-border p-6 shadow-sm space-y-4">
+      <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+        Items Ordered
+      </h3>
+
+      <div class="space-y-3 divide-y divide-stone-100 text-xs">
+        {% for item in order.items.all %}
+          <div class="pt-2 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-stone-900">{{ item.product_name }}</p>
+              {% if item.variation_name %}
+                <p class="text-[11px] text-stone-500">{{ item.variation_name }}</p>
+              {% endif %}
+              <p class="text-stone-400">{{ item.quantity }} &times; ₦{{ item.unit_price|intcomma }}</p>
+            </div>
+            <span class="font-black text-stone-900">₦{{ item.subtotal|intcomma }}</span>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="pt-4 border-t border-stone-200 space-y-2 text-xs">
+        <div class="flex items-center justify-between text-stone-600">
+          <span>Subtotal</span>
+          <span class="font-bold text-stone-900">₦{{ order.subtotal_amount|intcomma }}</span>
+        </div>
+        <div class="flex items-center justify-between text-stone-600">
+          <span>Delivery Fee</span>
+          <span class="font-bold text-stone-900">₦{{ order.delivery_fee|intcomma }}</span>
+        </div>
+        <div class="pt-2 border-t border-stone-200 flex items-center justify-between text-sm">
+          <span class="font-display font-bold text-stone-900">Total</span>
+          <span class="font-display text-xl font-black text-acadia-charcoal">₦{{ order.total_amount|intcomma }}</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-4 space-y-2">
+        <a href="https://wa.me/{{ site_settings.whatsapp_number }}?text=Hello%20Acadia!%20I%20just%20placed%20order%20{{ order.order_number }}" target="_blank" class="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors">
+          <span>📱</span> Send Payment Proof on WhatsApp
+        </a>
+        <button onclick="window.print()" class="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs rounded-xl transition-colors">
+          Print Order Receipt
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

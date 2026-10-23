@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Bakery Menu &amp; Food Ordering — Acadia Lagos{% endblock %}
+
+{% block content %}
+<div class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <!-- Page Header -->
+  <div class="mb-10 text-center md:text-left space-y-3">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-acadia-cream text-stone-700 text-xs font-bold border border-acadia-border">
+      Fresh Bakes • Cooked Meals • Celebration Cakes
+    </div>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900">
+      {% if active_category %}
+        {{ active_category.name }}
+      {% elif active_occasion %}
+        Treats for {{ active_occasion.name }}
+      {% else %}
+        The Acadia Menu
+      {% endif %}
+    </h1>
+    <p class="text-xs sm:text-sm text-stone-600 max-w-2xl leading-relaxed">
+      {% if active_category %}
+        {{ active_category.description }}
+      {% elif active_occasion %}
+        {{ active_occasion.description }}
+      {% else %}
+        Explore our handcrafted selection of fresh morning pastries, savory bistro meals, celebration cakes, and surprise treats. Made fresh daily in Lagos.
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- Search, Filter & Controls Bar -->
+  <div class="bg-white rounded-3xl border border-acadia-border p-4 sm:p-6 mb-10 shadow-sm space-y-4">
+    
+    <!-- Row 1: Search and Sorting -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- Live Search Input -->
+      <div class="relative w-full md:max-w-md">
+        <svg class="w-5 h-5 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          type="text" 
+          name="q" 
+          value="{{ query }}"
+          placeholder="Search products (e.g. cake, croissant, jollof)..." 
+          hx-get="{% url 'catalog:product_list' %}"
+          hx-trigger="keyup changed delay:350ms, search"
+          hx-target="#product-grid"
+          hx-push-url="true"
+          hx-include="[name='category'], [name='occasion'], [name='sort']"
+          class="w-full pl-11 pr-4 py-2.5 rounded-full border border-stone-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-acadia-orange bg-stone-50/50">
+      </div>
+
+      <!-- Sorting & Total Count -->
+      <div class="flex items-center justify-between w-full md:w-auto gap-4">
+        <span class="text-xs text-stone-500 font-semibold whitespace-nowrap">
+          {{ total_count }} items
+        </span>
+        <form method="GET" class="flex items-center gap-2">
+          {% if active_category %}
+            <input type="hidden" name="category" value="{{ active_category.slug }}">
+          {% endif %}
+          {% if active_occasion %}
+            <input type="hidden" name="occasion" value="{{ active_occasion.slug }}">
+          {% endif %}
+          <label for="sort-select" class="text-xs text-stone-500 font-bold whitespace-nowrap hidden sm:inline">Sort by:</label>
+          <select 
+            id="sort-select"
+            name="sort" 
+            onchange="this.form.submit()" 
+            class="px-3 py-2 rounded-xl border border-stone-200 text-xs font-bold text-stone-800 bg-white focus:outline-none focus:ring-2 focus:ring-acadia-orange">
+            <option value="order" {% if sort == 'order' %}selected{% endif %}>Featured &amp; Bestsellers</option>
+            <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest Additions</option>
+          </select>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Row 2: Category Filter Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-2 no-scrollbar">
+      <a 
+        href="{% url 'catalog:product_list' %}" 
+        class="px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all {% if not active_category and not active_occasion %}bg-stone-900 text-white shadow-sm{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+        All Menu
+      </a>
+      {% for cat in categories %}
+        <a 
+          href="{{ cat.get_absolute_url }}" 
+          class="px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all {% if active_category.id == cat.id %}bg-acadia-orange text-acadia-charcoal shadow-sm{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+          {{ cat.name }}
+        </a>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <!-- Product Listing Grid Container -->
+  {% include 'catalog/partials/product_grid.html' %}
+
+</div>
+{% endblock %}

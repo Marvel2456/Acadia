@@ -1,0 +1,338 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Acadia — Artisan Bakery, Celebration Cakes &amp; Food Bistro Lagos{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Acadia makes freshly baked treats with love, delicious cooked bistro meals, creative celebration cakes, and thoughtful surprise packages in Lagos, Nigeria.{% endblock %}">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:title" content="{% block og_title %}{% block title_content %}Acadia — A Little Sweetness. A Lot of Love.{% endblock %}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Acadia makes freshly baked treats with love, delicious cooked bistro meals, creative celebration cakes, and thoughtful surprise packages in Lagos, Nigeria.{% endblock %}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero-spread.jpg' %}{% endblock %}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}Acadia — Artisan Bakery & Bistro{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Fresh treats, cooked meals, creative cakes and surprise packages in Lagos.{% endblock %}">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logos/acadia-badge.svg' %}">
+
+  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            acadia: {
+              lime: '#E0E77A',
+              lavender: '#E8A9EF',
+              orange: '#FFBD55',
+              cream: '#FFFBEF',
+              charcoal: '#171717',
+              bg: '#FFFCF7',
+              border: '#F3ECE2',
+            }
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- HTMX CDN -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+  <!-- Custom Acadia Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/acadia.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-acadia-bg text-acadia-charcoal min-h-screen flex flex-col font-sans" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-acadia-cream border-b border-acadia-border/60 py-2 px-4 text-center text-xs font-medium text-stone-700">
+    <div class="max-w-7xl mx-auto flex items-center justify-between sm:justify-center gap-4">
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Freshly baking daily in Lekki, Lagos • Delivery across Lagos State
+      </span>
+      <a href="https://wa.me/{{ site_settings.whatsapp_number }}" target="_blank" class="hidden sm:inline-flex items-center gap-1 text-stone-900 font-bold hover:underline">
+        WhatsApp: {{ site_settings.phone }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="sticky top-0 z-40 bg-acadia-bg/95 backdrop-blur-md border-b border-stone-200/60 transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo -->
+        <a href="{% url 'cms:home' %}" class="flex items-center gap-2 flex-shrink-0 group py-1" aria-label="Acadia Homepage">
+          <img src="{{ site_settings.get_active_logo_url }}" alt="Acadia Logo" class="h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105">
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+          <a href="{% url 'cms:home' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            Home
+          </a>
+          <a href="{% url 'catalog:product_list' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            Menu &amp; Shop
+          </a>
+          <a href="{% url 'enquiries:custom_cake' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            Custom Cakes
+          </a>
+          <a href="{% url 'enquiries:surprise_packages' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            Surprise Packages
+          </a>
+          <a href="{% url 'cms:about' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            About Us
+          </a>
+          <a href="{% url 'cms:contact' %}" class="px-3.5 py-2 rounded-full text-sm font-semibold text-stone-800 hover:text-stone-950 hover:bg-stone-100 transition-colors">
+            Contact
+          </a>
+        </nav>
+
+        <!-- Right Side: Cart + Order CTA -->
+        <div class="flex items-center gap-3">
+          <!-- Cart Drawer Trigger Button -->
+          <button 
+            id="cart-button"
+            hx-get="{% url 'orders:cart_drawer' %}" 
+            hx-target="#cart-drawer-container"
+            hx-swap="innerHTML"
+            class="relative p-2.5 rounded-full hover:bg-stone-100 text-stone-800 transition-colors focus:outline-none"
+            aria-label="View Shopping Cart">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <span id="nav-cart-badge" class="absolute -top-1 -right-1 bg-acadia-orange text-acadia-charcoal text-xs font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-acadia-bg shadow-sm">
+              {{ cart_count }}
+            </span>
+          </button>
+
+          <!-- Primary Order CTA -->
+          <a href="{% url 'catalog:product_list' %}" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-acadia-charcoal bg-acadia-orange hover:bg-[#fcb342] rounded-full shadow-sm hover:shadow transition-all duration-200">
+            Order Now
+          </a>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button 
+            id="mobile-menu-btn"
+            type="button" 
+            onclick="toggleMobileMenu()" 
+            class="md:hidden p-2 rounded-xl text-stone-800 hover:bg-stone-100 focus:outline-none"
+            aria-label="Toggle navigation menu">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-acadia-bg px-4 pt-3 pb-6 space-y-2 shadow-lg">
+      <a href="{% url 'cms:home' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        Home
+      </a>
+      <a href="{% url 'catalog:product_list' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        Menu &amp; Shop
+      </a>
+      <a href="{% url 'enquiries:custom_cake' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        Order a Custom Cake
+      </a>
+      <a href="{% url 'enquiries:surprise_packages' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        Surprise Packages
+      </a>
+      <a href="{% url 'cms:about' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        About Acadia
+      </a>
+      <a href="{% url 'cms:contact' %}" class="block px-4 py-2.5 rounded-xl text-base font-semibold text-stone-800 hover:bg-acadia-cream">
+        Contact &amp; Location
+      </a>
+      <div class="pt-4 border-t border-stone-200 flex flex-col gap-2">
+        <a href="{% url 'catalog:product_list' %}" class="w-full text-center py-3 bg-acadia-orange text-acadia-charcoal font-bold rounded-xl shadow-sm">
+          Order Online Now
+        </a>
+        <a href="https://wa.me/{{ site_settings.whatsapp_number }}" target="_blank" class="w-full text-center py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-sm">
+          Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Messages Alert Toast -->
+  {% if messages %}
+    <div class="fixed top-24 right-4 z-50 max-w-md w-full space-y-2 pointer-events-none">
+      {% for message in messages %}
+        <div class="pointer-events-auto flex items-center justify-between p-4 rounded-2xl shadow-lg border {% if message.tags == 'error' %}bg-rose-50 text-rose-900 border-rose-200{% elif message.tags == 'success' %}bg-emerald-50 text-emerald-900 border-emerald-200{% else %}bg-amber-50 text-amber-900 border-amber-200{% endif %} transition-all animate-bounce-once">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">
+              {% if message.tags == 'success' %}✨{% elif message.tags == 'error' %}⚠️{% else %}ℹ️{% endif %}
+            </span>
+            <p class="text-sm font-semibold">{{ message }}</p>
+          </div>
+          <button onclick="this.parentElement.remove()" class="text-stone-400 hover:text-stone-700 p-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Cart Drawer Container (HTMX renders into here) -->
+  <div id="cart-drawer-container"></div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-acadia-cream border-t border-acadia-border/70 mt-20 pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="space-y-4">
+          <a href="{% url 'cms:home' %}" class="inline-block">
+            <img src="{% static 'images/logos/acadia-script-character.svg' %}" alt="Acadia" class="h-14 w-auto">
+          </a>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Freshly baked treats made with love, delicious cooked meals just right for your taste buds, creative celebration cakes, and thoughtful surprise packages for memorable moments.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            {% if site_settings.instagram_url %}
+              <a href="{{ site_settings.instagram_url }}" target="_blank" class="w-9 h-9 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-700 hover:bg-acadia-orange hover:text-acadia-charcoal transition-colors" aria-label="Instagram">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+            {% endif %}
+            {% if site_settings.whatsapp_number %}
+              <a href="https://wa.me/{{ site_settings.whatsapp_number }}" target="_blank" class="w-9 h-9 rounded-full bg-white border border-stone-200 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors" aria-label="WhatsApp">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div>
+          <h4 class="font-display text-lg font-bold text-stone-900 mb-4">Quick Links</h4>
+          <ul class="space-y-2.5 text-sm font-medium text-stone-600">
+            <li><a href="{% url 'cms:home' %}" class="hover:text-stone-950 transition-colors">Home</a></li>
+            <li><a href="{% url 'catalog:product_list' %}" class="hover:text-stone-950 transition-colors">Full Bakery Menu</a></li>
+            <li><a href="{% url 'enquiries:custom_cake' %}" class="hover:text-stone-950 transition-colors">Order a Custom Cake</a></li>
+            <li><a href="{% url 'enquiries:surprise_packages' %}" class="hover:text-stone-950 transition-colors">Surprise Gift Packages</a></li>
+            <li><a href="{% url 'orders:cart_detail' %}" class="hover:text-stone-950 transition-colors">Shopping Cart</a></li>
+            <li><a href="{% url 'cms:about' %}" class="hover:text-stone-950 transition-colors">About Our Craft</a></li>
+            <li><a href="{% url 'cms:contact' %}" class="hover:text-stone-950 transition-colors">Contact &amp; Location</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Categories -->
+        <div>
+          <h4 class="font-display text-lg font-bold text-stone-900 mb-4">Categories</h4>
+          <ul class="space-y-2.5 text-sm font-medium text-stone-600">
+            {% for cat in nav_categories %}
+              <li>
+                <a href="{{ cat.get_absolute_url }}" class="hover:text-stone-950 transition-colors">
+                  {{ cat.name }}
+                </a>
+              </li>
+            {% empty %}
+              <li><a href="{% url 'catalog:product_list' %}">Fresh Pastries</a></li>
+              <li><a href="{% url 'catalog:product_list' %}">Bistro Meals</a></li>
+              <li><a href="{% url 'catalog:product_list' %}">Custom Cakes</a></li>
+              <li><a href="{% url 'catalog:product_list' %}">Sweet Desserts</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact & Hours -->
+        <div>
+          <h4 class="font-display text-lg font-bold text-stone-900 mb-4">Visit &amp; Order</h4>
+          <div class="space-y-3 text-sm text-stone-600">
+            <p class="flex items-start gap-2.5">
+              <svg class="w-5 h-5 text-stone-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span>{{ site_settings.address }}</span>
+            </p>
+            <p class="flex items-center gap-2.5">
+              <svg class="w-5 h-5 text-stone-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <span>{{ site_settings.phone }}</span>
+            </p>
+            <p class="flex items-start gap-2.5">
+              <svg class="w-5 h-5 text-stone-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>{{ site_settings.opening_hours }}</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="border-t border-stone-200/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-stone-500">
+        <p>&copy; {% now "Y" %} {{ site_settings.business_name }}. Handcrafted with love in Lagos, Nigeria. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <a href="{% url 'cms:about' %}" class="hover:underline">Privacy &amp; Terms</a>
+          <span>•</span>
+          <a href="{% url 'cms:dashboard' %}" class="hover:text-stone-900 font-bold transition-colors">
+            Staff CMS Portal &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vanilla JS for Mobile Menu Toggle & Cart Drawer -->
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const hamburger = document.getElementById('hamburger-icon');
+      const close = document.getElementById('close-icon');
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        hamburger.classList.add('hidden');
+        close.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+        hamburger.classList.remove('hidden');
+        close.classList.add('hidden');
+      }
+    }
+
+    // Listen to HTMX custom event 'cartUpdated'
+    document.body.addEventListener('cartUpdated', function(evt) {
+      const badge = document.getElementById('nav-cart-badge');
+      if (badge && evt.detail && evt.detail.count !== undefined) {
+        badge.innerText = evt.detail.count;
+        badge.classList.add('scale-125');
+        setTimeout(() => badge.classList.remove('scale-125'), 300);
+      }
+    });
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,193 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load humanize %}
+
+{% block header_title %}Operations Overview{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-8">
+  
+  <!-- Top Stat Cards Grid -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-1">
+      <span class="text-xs font-bold text-stone-400 uppercase tracking-wider">Pending Orders</span>
+      <p class="text-3xl font-black text-amber-600">{{ pending_orders }}</p>
+      <span class="text-[11px] text-stone-500 font-semibold">{{ preparing_orders }} currently in kitchen</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-1">
+      <span class="text-xs font-bold text-stone-400 uppercase tracking-wider">Cake Enquiries</span>
+      <p class="text-3xl font-black text-purple-600">{{ new_cake_enquiries }}</p>
+      <span class="text-[11px] text-stone-500 font-semibold">New bespoke cake requests</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-1">
+      <span class="text-xs font-bold text-stone-400 uppercase tracking-wider">Surprise Packages</span>
+      <p class="text-3xl font-black text-emerald-600">{{ new_surprise_enquiries }}</p>
+      <span class="text-[11px] text-stone-500 font-semibold">Active surprise gift bookings</span>
+    </div>
+
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-1">
+      <span class="text-xs font-bold text-stone-400 uppercase tracking-wider">Verified Revenue</span>
+      <p class="text-3xl font-black text-stone-900">₦{{ total_sales|intcomma }}</p>
+      <span class="text-[11px] text-emerald-600 font-semibold">{{ completed_orders }} orders delivered</span>
+    </div>
+
+  </div>
+
+  <!-- Quick Action Shortcuts -->
+  <div class="bg-acadia-cream/80 border border-acadia-border p-5 rounded-2xl flex flex-wrap items-center gap-3">
+    <span class="text-xs font-bold text-stone-600 uppercase tracking-wider mr-2">Quick Actions:</span>
+    <a href="{% url 'cms:product_create' %}" class="px-3.5 py-2 rounded-xl bg-acadia-orange text-acadia-charcoal font-bold text-xs shadow-sm hover:bg-[#fcb342]">
+      + Add New Product
+    </a>
+    <a href="{% url 'cms:cake_enquiries' %}" class="px-3.5 py-2 rounded-xl bg-white border border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-50">
+      Review Cake Requests ({{ new_cake_enquiries }})
+    </a>
+    <a href="{% url 'cms:orders' %}" class="px-3.5 py-2 rounded-xl bg-white border border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-50">
+      Manage Orders
+    </a>
+    <a href="{% url 'cms:settings' %}" class="px-3.5 py-2 rounded-xl bg-white border border-stone-300 text-stone-800 font-bold text-xs hover:bg-stone-50">
+      Edit Business Settings
+    </a>
+  </div>
+
+  <!-- Recent Orders Table -->
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm space-y-4">
+    <div class="p-5 border-b border-stone-100 flex items-center justify-between">
+      <div>
+        <h2 class="font-bold text-stone-900 text-base">Recent Customer Orders</h2>
+        <p class="text-xs text-stone-500">Live order pipeline from website checkout</p>
+      </div>
+      <a href="{% url 'cms:orders' %}" class="text-xs font-bold text-acadia-orange hover:underline">
+        View All Orders &rarr;
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="bg-stone-50 border-b border-stone-100 text-stone-500 font-bold uppercase tracking-wider">
+            <th class="p-3.5 pl-5">Order #</th>
+            <th class="p-3.5">Customer</th>
+            <th class="p-3.5">Items</th>
+            <th class="p-3.5">Total (₦)</th>
+            <th class="p-3.5">Payment</th>
+            <th class="p-3.5">Fulfilment</th>
+            <th class="p-3.5 text-right pr-5">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+          {% for order in recent_orders %}
+            <tr class="hover:bg-stone-50/80 transition-colors">
+              <td class="p-3.5 pl-5 font-mono font-bold text-stone-900">
+                <a href="{% url 'cms:order_detail' order_number=order.order_number %}" class="hover:underline">
+                  {{ order.order_number }}
+                </a>
+              </td>
+              <td class="p-3.5">
+                <p class="font-bold text-stone-900">{{ order.customer_name }}</p>
+                <p class="text-[11px] text-stone-400">{{ order.customer_phone }}</p>
+              </td>
+              <td class="p-3.5">
+                {{ order.items.count }} item{{ order.items.count|pluralize }}
+              </td>
+              <td class="p-3.5 font-bold text-stone-900">
+                ₦{{ order.total_amount|intcomma }}
+              </td>
+              <td class="p-3.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if order.payment_status == 'paid' %}bg-emerald-100 text-emerald-800{% else %}bg-amber-100 text-amber-800{% endif %}">
+                  {{ order.get_payment_status_display }}
+                </span>
+              </td>
+              <td class="p-3.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if order.fulfilment_status == 'completed' %}bg-emerald-100 text-emerald-800{% elif order.fulfilment_status == 'preparing' %}bg-purple-100 text-purple-800{% else %}bg-stone-100 text-stone-800{% endif %}">
+                  {{ order.get_fulfilment_status_display }}
+                </span>
+              </td>
+              <td class="p-3.5 text-right pr-5">
+                <a href="{% url 'cms:order_detail' order_number=order.order_number %}" class="text-xs font-bold text-stone-900 hover:text-acadia-orange">
+                  Manage &rarr;
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="p-6 text-center text-stone-400">No orders received yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Custom Cake Requests -->
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm space-y-4">
+    <div class="p-5 border-b border-stone-100 flex items-center justify-between">
+      <div>
+        <h2 class="font-bold text-stone-900 text-base">Recent Custom Cake Enquiries</h2>
+        <p class="text-xs text-stone-500">Bespoke celebration cakes awaiting review &amp; quotes</p>
+      </div>
+      <a href="{% url 'cms:cake_enquiries' %}" class="text-xs font-bold text-acadia-orange hover:underline">
+        View All Enquiries &rarr;
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="bg-stone-50 border-b border-stone-100 text-stone-500 font-bold uppercase tracking-wider">
+            <th class="p-3.5 pl-5">Ref #</th>
+            <th class="p-3.5">Customer</th>
+            <th class="p-3.5">Occasion</th>
+            <th class="p-3.5">Size &amp; Flavour</th>
+            <th class="p-3.5">Event Date</th>
+            <th class="p-3.5">Status</th>
+            <th class="p-3.5 text-right pr-5">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+          {% for cake in recent_cake_enquiries %}
+            <tr class="hover:bg-stone-50/80 transition-colors">
+              <td class="p-3.5 pl-5 font-mono font-bold text-stone-900">
+                <a href="{% url 'cms:cake_enquiry_detail' reference_number=cake.reference_number %}" class="hover:underline">
+                  {{ cake.reference_number }}
+                </a>
+              </td>
+              <td class="p-3.5">
+                <p class="font-bold text-stone-900">{{ cake.customer_name }}</p>
+                <p class="text-[11px] text-stone-400">{{ cake.phone }}</p>
+              </td>
+              <td class="p-3.5">
+                {{ cake.get_occasion_display }}
+              </td>
+              <td class="p-3.5">
+                <p class="font-semibold text-stone-900">{{ cake.get_cake_size_display }}</p>
+                <p class="text-[11px] text-stone-400">{{ cake.get_flavour_display }}</p>
+              </td>
+              <td class="p-3.5 font-bold text-stone-900">
+                {{ cake.requested_date|date:"M d, Y" }}
+              </td>
+              <td class="p-3.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if cake.status == 'new' %}bg-purple-100 text-purple-900{% elif cake.status == 'confirmed' %}bg-emerald-100 text-emerald-900{% else %}bg-stone-100 text-stone-800{% endif %}">
+                  {{ cake.get_status_display }}
+                </span>
+              </td>
+              <td class="p-3.5 text-right pr-5">
+                <a href="{% url 'cms:cake_enquiry_detail' reference_number=cake.reference_number %}" class="text-xs font-bold text-stone-900 hover:text-acadia-orange">
+                  Inspect &rarr;
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="p-6 text-center text-stone-400">No custom cake enquiries yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

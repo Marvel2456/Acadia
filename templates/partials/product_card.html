@@ -1,0 +1,82 @@
+{% load humanize %}
+<div class="group bg-white rounded-3xl border border-acadia-border p-4 shadow-acadia-soft shadow-acadia-hover flex flex-col justify-between transition-all duration-300">
+  <!-- Card Header & Image -->
+  <div class="relative overflow-hidden rounded-2xl bg-acadia-cream aspect-square mb-4">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+    {% else %}
+      <div class="w-full h-full flex items-center justify-center text-4xl bg-acadia-cream">
+        🥐
+      </div>
+    {% endif %}
+
+    <!-- Badges -->
+    <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+      {% if product.is_bestseller %}
+        <span class="badge-orange uppercase tracking-wider text-[10px] font-black shadow-sm">
+          ★ Bestseller
+        </span>
+      {% elif product.is_featured %}
+        <span class="badge-lime uppercase tracking-wider text-[10px] font-black shadow-sm">
+          Chef's Pick
+        </span>
+      {% endif %}
+      {% if product.servings_or_size %}
+        <span class="bg-white/90 backdrop-blur-sm text-stone-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-stone-200 shadow-sm">
+          {{ product.servings_or_size }}
+        </span>
+      {% endif %}
+    </div>
+
+    <!-- Quick Details Hover Pill -->
+    <a href="{{ product.get_absolute_url }}" class="absolute inset-0 z-0" aria-label="View {{ product.name }} details"></a>
+  </div>
+
+  <!-- Content & Title -->
+  <div class="flex-grow flex flex-col justify-between">
+    <div>
+      <div class="flex items-center justify-between text-xs text-stone-500 font-semibold mb-1">
+        <span>{{ product.category.name }}</span>
+        {% if product.lead_time_hours > 0 %}
+          <span class="text-stone-400">🕒 {{ product.lead_time_hours }}h notice</span>
+        {% endif %}
+      </div>
+      <h3 class="font-display text-base sm:text-lg font-bold text-stone-900 group-hover:text-acadia-charcoal transition-colors line-clamp-1 mb-1.5">
+        <a href="{{ product.get_absolute_url }}">
+          {{ product.name }}
+        </a>
+      </h3>
+      <p class="text-xs text-stone-600 line-clamp-2 leading-relaxed mb-4">
+        {{ product.short_description }}
+      </p>
+    </div>
+
+    <!-- Price and Add-To-Cart Action -->
+    <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+      <div>
+        <span class="text-xs text-stone-400 block font-medium">Price</span>
+        <span class="font-display text-lg font-black text-stone-900">
+          ₦{{ product.price|intcomma }}
+        </span>
+      </div>
+
+      {% if product.is_available %}
+        <form hx-post="{% url 'orders:cart_add' product_id=product.id %}" hx-target="#nav-cart-badge" hx-swap="outerHTML" class="inline">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <button 
+            type="submit" 
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-bold text-xs shadow-sm hover:shadow active:scale-95 transition-all"
+            aria-label="Add {{ product.name }} to cart">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            <span>Add</span>
+          </button>
+        </form>
+      {% else %}
+        <span class="text-xs font-semibold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-full">
+          Sold Out
+        </span>
+      {% endif %}
+    </div>
+  </div>
+</div>

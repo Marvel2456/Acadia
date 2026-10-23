@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="none">
+  <!-- Outer scalloped circle -->
+  <defs>
+    <path id="circlePath" d="M 100, 100 m -68, 0 a 68,68 0 1,1 136,0 a 68,68 0 1,1 -136,0" />
+  </defs>
+
+  <!-- Outer Ring with scalloped edge -->
+  <circle cx="100" cy="100" r="94" fill="#FFFBEF" stroke="#171717" stroke-width="4"/>
+  <circle cx="100" cy="100" r="88" fill="none" stroke="#FFBD55" stroke-width="2" stroke-dasharray="4,4"/>
+  <circle cx="100" cy="100" r="76" fill="#FFBD55" fill-opacity="0.15" stroke="#171717" stroke-width="2"/>
+  
+  <!-- Curved Text around circle -->
+  <text font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="800" fill="#171717" letter-spacing="2.5">
+    <textPath href="#circlePath" startOffset="50%" text-anchor="middle">
+      ★ ACADIA BAKERY &amp; TREATS ★
+    </textPath>
+  </text>
+  
+  <!-- Central Medallion -->
+  <circle cx="100" cy="100" r="54" fill="#FFFBEF" stroke="#171717" stroke-width="3"/>
+  
+  <!-- Ornate 'A' Initial -->
+  <g transform="translate(100, 114)">
+    <text x="0" y="0" font-family="'Playfair Display', Georgia, serif" font-size="62" font-weight="900" font-style="italic" fill="#171717" text-anchor="middle">
+      A
+    </text>
+    <!-- Little crown / spark above A -->
+    <path d="M-12,-48 L-6,-40 L0,-49 L6,-40 L12,-48 L8,-36 L-8,-36 Z" fill="#FFBD55" stroke="#171717" stroke-width="1.2"/>
+  </g>
+  
+  <!-- Soft Lime & Lavender Dots -->
+  <circle cx="48" cy="100" r="4" fill="#E0E77A" stroke="#171717" stroke-width="1.5"/>
+  <circle cx="152" cy="100" r="4" fill="#E8A9EF" stroke="#171717" stroke-width="1.5"/>
+  
+  <!-- Est 2024 bottom tag -->
+  <rect x="74" y="146" width="52" height="18" rx="9" fill="#171717"/>
+  <text x="100" y="159" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#FFFBEF" text-anchor="middle" letter-spacing="1">
+    EST. 2024
+  </text>
+</svg>

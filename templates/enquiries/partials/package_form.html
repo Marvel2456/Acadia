@@ -1,0 +1,160 @@
+<div id="package-form-wrapper" class="bg-white rounded-3xl border border-acadia-border p-6 sm:p-10 shadow-sm space-y-6">
+  
+  {% if form.non_field_errors %}
+    <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
+      {% for err in form.non_field_errors %}
+        <p>{{ err }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Hidden Package selector if already chosen -->
+  {% if package %}
+    <input type="hidden" name="package" value="{{ package.id }}">
+  {% else %}
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Choose Surprise Package *
+      </label>
+      {{ form.package }}
+    </div>
+  {% endif %}
+
+  <!-- Step 1: Sender Details -->
+  <div class="space-y-4">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      1. Your Information (The Sender)
+    </h3>
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Your Full Name *
+      </label>
+      {{ form.sender_name }}
+      {% if form.sender_name.errors %}
+        <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.sender_name.errors.0 }}</p>
+      {% endif %}
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Your Email *
+        </label>
+        {{ form.sender_email }}
+        {% if form.sender_email.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.sender_email.errors.0 }}</p>
+        {% endif %}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Your Phone / WhatsApp *
+        </label>
+        {{ form.sender_phone }}
+        {% if form.sender_phone.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.sender_phone.errors.0 }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Recipient Details -->
+  <div class="space-y-4 pt-4 border-t border-stone-100">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      2. The Lucky Recipient (The Surprise!)
+    </h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Recipient Name *
+        </label>
+        {{ form.recipient_name }}
+        {% if form.recipient_name.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.recipient_name.errors.0 }}</p>
+        {% endif %}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Recipient Phone Number *
+        </label>
+        {{ form.recipient_phone }}
+        {% if form.recipient_phone.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.recipient_phone.errors.0 }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Delivery Address (Home or Office in Lagos) *
+      </label>
+      {{ form.delivery_address }}
+      {% if form.delivery_address.errors %}
+        <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.delivery_address.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Occasion *
+        </label>
+        {{ form.occasion }}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Surprise Delivery Date *
+        </label>
+        {{ form.delivery_date }}
+        {% if form.delivery_date.errors %}
+          <p class="text-rose-600 text-xs font-semibold mt-1">{{ form.delivery_date.errors.0 }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Heartfelt Card & Personalization -->
+  <div class="space-y-4 pt-4 border-t border-stone-100">
+    <h3 class="font-display text-lg font-bold text-stone-900 border-b border-stone-100 pb-2">
+      3. Personal Touch &amp; Custom Add-ons
+    </h3>
+    
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Personal Greeting Card Note (Handwritten by Acadia)
+      </label>
+      {{ form.personal_card_message }}
+      <p class="text-[11px] text-stone-400 mt-1">This will be handwritten inside the presentation card enclosed in the hamper.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Optional Add-ons
+        </label>
+        {{ form.custom_addons }}
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+          Estimated Budget Range
+        </label>
+        {{ form.budget_range }}
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1.5">
+        Special Surprise Delivery Instructions
+      </label>
+      {{ form.additional_instructions }}
+    </div>
+  </div>
+
+  <div class="pt-6 border-t border-stone-200">
+    <button 
+      type="submit" 
+      class="w-full py-4 px-8 rounded-full bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-black text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+      <span>🎁</span>
+      <span>Schedule &amp; Book Surprise Package &rarr;</span>
+    </button>
+  </div>
+
+</div>

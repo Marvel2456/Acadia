@@ -1,0 +1,83 @@
+{% extends 'cms/admin/base_admin.html' %}
+{% load humanize %}
+
+{% block header_title %}Custom Cake Enquiries{% endblock %}
+
+{% block admin_content %}
+<div class="space-y-6">
+  
+  <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Filter Status:</span>
+      <div class="flex items-center gap-1.5 overflow-x-auto">
+        <a href="{% url 'cms:cake_enquiries' %}" class="px-3 py-1.5 rounded-lg text-xs font-bold {% if not status_filter %}bg-stone-900 text-white{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+          All
+        </a>
+        {% for val, label in status_choices %}
+          <a href="{% url 'cms:cake_enquiries' %}?status={{ val }}" class="px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {% if status_filter == val %}bg-purple-600 text-white{% else %}bg-stone-100 text-stone-700 hover:bg-stone-200{% endif %}">
+            {{ label }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-xs">
+        <thead>
+          <tr class="bg-stone-50 border-b border-stone-200 text-stone-500 font-bold uppercase tracking-wider">
+            <th class="p-4 pl-6">Ref #</th>
+            <th class="p-4">Customer</th>
+            <th class="p-4">Occasion &amp; Size</th>
+            <th class="p-4">Flavour</th>
+            <th class="p-4">Event Date</th>
+            <th class="p-4">Status</th>
+            <th class="p-4 text-right pr-6">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 font-medium text-stone-700">
+          {% for cake in enquiries %}
+            <tr class="hover:bg-stone-50/80 transition-colors">
+              <td class="p-4 pl-6 font-mono font-bold text-stone-900">
+                <a href="{% url 'cms:cake_enquiry_detail' reference_number=cake.reference_number %}" class="hover:underline">
+                  {{ cake.reference_number }}
+                </a>
+              </td>
+              <td class="p-4">
+                <p class="font-bold text-stone-900">{{ cake.customer_name }}</p>
+                <p class="text-[11px] text-stone-400">{{ cake.phone }} • {{ cake.email }}</p>
+              </td>
+              <td class="p-4">
+                <p class="font-bold text-stone-800">{{ cake.get_occasion_display }}</p>
+                <p class="text-[11px] text-stone-400">{{ cake.get_cake_size_display }}</p>
+              </td>
+              <td class="p-4 text-stone-700">
+                {{ cake.get_flavour_display }}
+              </td>
+              <td class="p-4 font-bold text-stone-900">
+                {{ cake.requested_date|date:"F d, Y" }}
+              </td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold {% if cake.status == 'new' %}bg-purple-100 text-purple-900{% elif cake.status == 'confirmed' %}bg-emerald-100 text-emerald-900{% else %}bg-stone-100 text-stone-800{% endif %}">
+                  {{ cake.get_status_display }}
+                </span>
+              </td>
+              <td class="p-4 text-right pr-6">
+                <a href="{% url 'cms:cake_enquiry_detail' reference_number=cake.reference_number %}" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs">
+                  Review &rarr;
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="p-8 text-center text-stone-400">No custom cake enquiries found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order a Custom Cake — Acadia Bakery Lagos{% endblock %}
+{% block meta_description %}Request a custom cake for birthdays, weddings, anniversaries and celebrations in Lagos. Choose your flavours, sizes, and upload design references.{% endblock %}
+
+{% block content %}
+<div class="py-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <!-- Header Banner -->
+  <div class="text-center max-w-2xl mx-auto mb-10 space-y-3">
+    <span class="badge-lavender text-xs uppercase tracking-wider font-extrabold">Bespoke Confectionery</span>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900">
+      Your Dream Cake, Made Beautiful.
+    </h1>
+    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+      Fill out the enquiry form below with your dream design, flavour preferences, and celebration date. Our head cake artist will review and get back to you with a custom quote.
+    </p>
+
+    <!-- Lead Time Notice Alert -->
+    <div class="inline-flex items-center gap-2 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold text-left">
+      <span>⏰</span>
+      <span>Notice: Custom artisan cakes require a minimum lead time of <strong>{{ site_settings.lead_time_cake_days }} days</strong>.</span>
+    </div>
+  </div>
+
+  <!-- Form Container with HTMX submission -->
+  <form 
+    id="custom-cake-form" 
+    method="POST" 
+    enctype="multipart/form-data" 
+    action="{% url 'enquiries:custom_cake' %}"
+    hx-post="{% url 'enquiries:custom_cake' %}"
+    hx-target="#cake-form-wrapper"
+    hx-swap="outerHTML">
+    {% csrf_token %}
+    {% include 'enquiries/partials/cake_form.html' %}
+  </form>
+
+</div>
+{% endblock %}

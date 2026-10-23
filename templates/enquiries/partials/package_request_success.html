@@ -1,0 +1,33 @@
+<div class="bg-white rounded-3xl border-2 border-emerald-400 p-8 sm:p-12 text-center space-y-4 shadow-xl animate-fade-in">
+  <div class="w-20 h-20 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-4xl shadow-sm">
+    🎁
+  </div>
+  <span class="badge-lime text-xs font-black uppercase tracking-wider">Surprise Scheduled</span>
+  <h2 class="font-display text-2xl sm:text-3xl font-black text-stone-900">
+    Thank You, {{ enquiry.sender_name }}!
+  </h2>
+  <p class="text-xs sm:text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
+    We have received your surprise gift booking for <strong>{{ enquiry.recipient_name }}</strong> on <strong>{{ enquiry.delivery_date|date:"F d, Y" }}</strong>.
+  </p>
+  
+  <div class="p-4 rounded-2xl bg-acadia-cream border border-acadia-border max-w-sm mx-auto space-y-1">
+    <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Tracking Reference</span>
+    <p class="font-mono text-lg font-black text-stone-900">{{ enquiry.reference_number }}</p>
+  </div>
+
+  <div class="p-4 bg-stone-50 rounded-2xl max-w-md mx-auto text-xs text-stone-600 text-left space-y-2">
+    <p class="font-bold text-stone-900">Surprise Dispatch Plan:</p>
+    <p>1. Our concierge will review your personal card message and custom add-on requests.</p>
+    <p>2. We will contact you at {{ enquiry.sender_phone }} to confirm dispatch timing and final payment details.</p>
+    <p>3. We will deliver the surprise package directly to {{ enquiry.recipient_name }} with festive celebration ribbons!</p>
+  </div>
+
+  <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+    <a href="https://wa.me/{{ site_settings.whatsapp_number }}?text=Hello%20Acadia!%20I%20just%20booked%20surprise%20package%20{{ enquiry.reference_number }}" target="_blank" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors">
+      Coordinate on WhatsApp &rarr;
+    </a>
+    <a href="{% url 'cms:home' %}" class="px-6 py-3 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs rounded-xl transition-colors">
+      Back to Homepage
+    </a>
+  </div>
+</div>

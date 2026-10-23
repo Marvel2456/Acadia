@@ -1,0 +1,29 @@
+{% load humanize %}
+<span id="nav-cart-badge" class="absolute -top-1 -right-1 bg-acadia-orange text-acadia-charcoal text-xs font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-acadia-bg shadow-sm scale-125 transition-transform duration-200">
+  {{ cart_count }}
+</span>
+
+<!-- Transient Toast Notification -->
+{% if just_added_name %}
+  <div hx-swap-oob="beforeend:#main-content">
+    <div id="added-toast" class="fixed bottom-6 right-6 z-50 bg-stone-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-stone-800 transition-all duration-300">
+      <span class="text-xl">🥐</span>
+      <div>
+        <p class="text-xs font-bold text-acadia-orange uppercase tracking-wider">Added to Basket</p>
+        <p class="text-sm font-semibold">{{ just_added_name }}</p>
+      </div>
+      <a href="{% url 'orders:cart_detail' %}" class="ml-2 px-3 py-1 bg-acadia-orange text-acadia-charcoal text-xs font-bold rounded-lg hover:bg-[#fcb342]">
+        View Cart
+      </a>
+      <button onclick="document.getElementById('added-toast').remove()" class="text-stone-400 hover:text-white p-1">
+        ✕
+      </button>
+    </div>
+    <script>
+      setTimeout(() => {
+        const toast = document.getElementById('added-toast');
+        if (toast) toast.remove();
+      }, 4000);
+    </script>
+  </div>
+{% endif %}

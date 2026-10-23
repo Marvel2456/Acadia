@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Surprise Packages &amp; Gifting Hampers — Acadia Lagos{% endblock %}
+{% block meta_description %}Make someone's day unforgettable with Acadia's surprise packages. Curated hampers with bento cakes, cupcakes, chocolates, handwritten notes, and celebration touches.{% endblock %}
+
+{% block content %}
+<div class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+    <span class="badge-lime text-xs uppercase tracking-wider font-extrabold">Curated Celebrations</span>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-stone-900">
+      Make Someone's Day Extra Special.
+    </h1>
+    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+      Thoughtful surprise gift hampers tailored for birthdays, anniversaries, graduations, or just-because moments. Delivered with love straight to their doorstep across Lagos.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for pkg in packages %}
+      <div class="bg-white rounded-3xl border border-acadia-border overflow-hidden shadow-acadia-soft flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+        
+        <div class="relative aspect-[4/3] bg-acadia-cream overflow-hidden">
+          {% if pkg.image %}
+            <img src="{{ pkg.image.url }}" alt="{{ pkg.name }}" class="w-full h-full object-cover">
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center text-5xl">🎁</div>
+          {% endif %}
+          <span class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-black text-stone-900 shadow-sm">
+            From ₦{{ pkg.starting_price|intcomma }}
+          </span>
+          {% if pkg.is_featured %}
+            <span class="absolute top-4 left-4 badge-orange uppercase tracking-wider text-[10px] font-black shadow-sm">
+              Popular Choice
+            </span>
+          {% endif %}
+        </div>
+
+        <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-6">
+          <div class="space-y-4">
+            <h2 class="font-display text-2xl font-bold text-stone-900">
+              {{ pkg.name }}
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              {{ pkg.short_description }}
+            </p>
+
+            <!-- Included items -->
+            <div class="p-4 rounded-2xl bg-acadia-cream/50 border border-acadia-border space-y-2">
+              <span class="text-[11px] font-black uppercase tracking-wider text-stone-500 block">
+                Hamper Inclusions:
+              </span>
+              <ul class="text-xs text-stone-700 space-y-1.5 font-medium">
+                {% for item in pkg.get_items_list %}
+                  <li class="flex items-start gap-2">
+                    <span class="text-acadia-orange font-bold mt-0.5">•</span>
+                    <span>{{ item }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <a href="{% url 'enquiries:package_detail' slug=pkg.slug %}" class="w-full block text-center py-3.5 bg-acadia-orange hover:bg-[#fcb342] text-acadia-charcoal font-black text-xs rounded-xl shadow-sm transition-colors">
+              Customize &amp; Book Package &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
